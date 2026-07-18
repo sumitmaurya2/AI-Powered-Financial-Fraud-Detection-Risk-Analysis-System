@@ -1,1 +1,2 @@
 npm install react-router-dom axios react-icons recharts
+npm install react-hook-form zod @hookform/resolvers
