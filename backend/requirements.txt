@@ -1,5 +1,8 @@
-npm install express cors dotenv mongoose axios
+express
+cors
+dotenv
+mongoose
+axios
+morgan
+helmet
 
-npm install -D typescript ts-node-dev @types/node @types/express @types/cors @types/mongoose
-
-npm install morgan helmet
