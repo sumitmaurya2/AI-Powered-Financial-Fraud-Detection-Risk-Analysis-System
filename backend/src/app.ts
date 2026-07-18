@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 
+import predictionRoutes from "./routes/prediction.routes";
+
 const app = express();
 
 app.use(cors());
@@ -12,5 +14,7 @@ app.get("/api/health", (req, res) => {
     message: "Backend is running 🚀",
   });
 });
+
+app.use("/api/predict", predictionRoutes);
 
 export default app;
