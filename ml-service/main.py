@@ -86,9 +86,9 @@ def predict(data: PredictionRequest):
     # Scale input
     input_scaled = scaler.transform(input_data)
 
-    prediction = int(model.predict(input_scaled)[0])
-
     probability = float(model.predict_proba(input_scaled)[0][1])
+
+    prediction = 1 if probability >= 0.30 else 0
 
     return {
     "prediction": "Fraud" if prediction == 1 else "Safe",

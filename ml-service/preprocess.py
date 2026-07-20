@@ -1,6 +1,9 @@
 import pandas as pd
+from xgboost import data
 from feature_names import FEATURE_COLUMNS
 
+data["location"] = data["location"].strip().title()
+data["homeCity"] = data["homeCity"].strip().title()
 
 def preprocess_input(data: dict):
     # Initialize all features with 0
