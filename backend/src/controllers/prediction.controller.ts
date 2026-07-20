@@ -34,15 +34,20 @@ export const predictFraud = async (
       success: true,
       data: predictionData,
     });
-  } catch (error: any) {
-    console.error(error);
+ } catch (error: any) {
+
+    console.error("========== AXIOS ERROR ==========");
+    console.error(error.response?.data);
+    console.error(error.response?.status);
+    console.error(error.message);
+    console.error("===============================");
 
     res.status(500).json({
-      success: false,
-      message: "Prediction Failed",
-      error: error.message,
+        success:false,
+        message:"Prediction Failed",
+        error:error.response?.data || error.message
     });
-  }
+}
 };
 
 
