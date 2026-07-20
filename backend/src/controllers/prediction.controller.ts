@@ -8,10 +8,16 @@ export const predictFraud = async (
 ): Promise<void> => {
   try {
     // Call FastAPI
+    console.log("===== REQUEST BODY =====");
+    console.log(req.body);
+
     const response = await axios.post(
-          `${process.env.ML_API_URL}/predict`,
-      req.body
+    `${process.env.ML_API_URL}/predict`,
+    req.body
     );
+
+console.log("===== FASTAPI RESPONSE =====");
+console.log(response.data);
 
     const predictionData = response.data;
 
@@ -34,18 +40,21 @@ export const predictFraud = async (
       success: true,
       data: predictionData,
     });
- } catch (error: any) {
+} catch (error: any) {
 
-    console.error("========== AXIOS ERROR ==========");
-    console.error(error.response?.data);
-    console.error(error.response?.status);
-    console.error(error.message);
-    console.error("===============================");
+    console.log("========== ERROR ==========");
 
-    res.status(500).json({
-        success:false,
-        message:"Prediction Failed",
-        error:error.response?.data || error.message
+    console.log("Status:", error.response?.status);
+
+    console.log("Data:", error.response?.data);
+
+    console.log("Message:", error.message);
+
+    console.log("===========================");
+
+    return res.status(500).json({
+        success: false,
+        error: error.response?.data || error.message
     });
 }
 };

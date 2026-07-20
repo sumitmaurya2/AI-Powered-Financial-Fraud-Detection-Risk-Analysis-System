@@ -41,22 +41,47 @@ const Predict = () => {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    try {
-      setLoading(true);
-
-      const response = await api.post("/predict", formData);
-
-      setResult(response.data.data);
-    } catch (error) {
-      console.error(error);
-      alert("Prediction Failed");
-    } finally {
-      setLoading(false);
-    }
+  const payload = {
+    amount: Number(formData.amount),
+    hour: Number(formData.hour),
+    location: formData.location.trim(),
+    device: formData.device,
+    merchant: formData.merchant,
+    isInternational: formData.isInternational,
+    transactionsLast1H: Number(formData.transactionsLast1H),
+    age: Number(formData.age),
+    monthlyIncome: Number(formData.monthlyIncome),
+    averageTransaction: Number(formData.averageTransaction),
+    occupation: formData.occupation,
+    homeCity: formData.homeCity.trim(),
+    usualDevice: formData.usualDevice,
   };
+
+  try {
+    setLoading(true);
+
+    const response = await api.post("/predict", payload);
+
+    setResult(response.data.data);
+  } catch (error: any) {
+    console.error(error);
+
+    if (error.response?.data) {
+      console.log(error.response.data);
+      alert(
+        error.response.data.message ||
+          JSON.stringify(error.response.data)
+      );
+    } else {
+      alert("Prediction Failed");
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="max-w-4xl mx-auto p-8">
@@ -128,25 +153,27 @@ const Predict = () => {
           className="border p-2 rounded"
         />
 
-        <input
-          type="text"
-          name="location"
-          placeholder="Enter transaction location"
-          value={formData.location}
-          onChange={handleChange}
-          required
-          className="border p-2 rounded"
-        />
+      <input
+  type="text"
+  name="location"
+  placeholder="Enter transaction location"
+  value={formData.location}
+  onChange={handleChange}
+  autoComplete="off"
+  required
+  className="border p-2 rounded"
+/>
 
-        <input
-          type="text"
-          name="homeCity"
-          placeholder="Enter home city"
-          value={formData.homeCity}
-          onChange={handleChange}
-          required
-          className="border p-2 rounded"
-        />
+       <input
+  type="text"
+  name="homeCity"
+  placeholder="Enter home city"
+  value={formData.homeCity}
+  onChange={handleChange}
+  autoComplete="off"
+  required
+  className="border p-2 rounded"
+/>
 
         <select
           name="device"

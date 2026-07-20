@@ -1,15 +1,23 @@
 import pandas as pd
-from xgboost import data
 from feature_names import FEATURE_COLUMNS
 
-data["location"] = data["location"].strip().title()
-data["homeCity"] = data["homeCity"].strip().title()
 
 def preprocess_input(data: dict):
-    # Initialize all features with 0
+
+    # -----------------------------
+    # Normalize text input
+    # -----------------------------
+    data["location"] = data["location"].strip().title()
+    data["homeCity"] = data["homeCity"].strip().title()
+
+    # -----------------------------
+    # Initialize all features
+    # -----------------------------
     features = {feature: 0 for feature in FEATURE_COLUMNS}
 
+    # -----------------------------
     # Numerical Features
+    # -----------------------------
     features["Amount"] = data["amount"]
     features["Hour"] = data["hour"]
     features["Is_International"] = int(data["isInternational"])
@@ -18,7 +26,9 @@ def preprocess_input(data: dict):
     features["Monthly_Income"] = data["monthlyIncome"]
     features["Average_Transaction"] = data["averageTransaction"]
 
+    # -----------------------------
     # Feature Engineering
+    # -----------------------------
     if data["averageTransaction"] > 0:
         features["Transaction_Ratio"] = (
             data["amount"] / data["averageTransaction"]
@@ -38,8 +48,9 @@ def preprocess_input(data: dict):
         1 if data["hour"] >= 22 or data["hour"] <= 5 else 0
     )
 
+    # -----------------------------
     # One Hot Encoding
-
+    # -----------------------------
     location = f"Location_{data['location']}"
     if location in features:
         features[location] = 1
@@ -64,7 +75,9 @@ def preprocess_input(data: dict):
     if usual_device in features:
         features[usual_device] = 1
 
-    # Create DataFrame in exact training feature order
+    # -----------------------------
+    # Return DataFrame
+    # -----------------------------
     df = pd.DataFrame([features])
 
     return df[FEATURE_COLUMNS]
